@@ -1,4 +1,4 @@
 /node_modules
 .env
-.firebaseConfig.json
-.serviceAccount.json
+firebaseConfig.json
+serviceAccount.json
