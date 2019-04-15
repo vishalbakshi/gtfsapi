@@ -32,7 +32,7 @@ let downloadFile = fs.createWriteStream("./download.zip");
 
 // GET request to transitfeeds URL will redirect to the file location
 // pipe the file to WriteStream
-// TODO: 
+// TODO: unzip the file using `yauzl`
 https.get(requestURL, (res) => {
     const { statusCode } = res;
     const contentType = res.headers['content-type'];
