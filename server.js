@@ -3,22 +3,50 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const connection = require('./database');
-const port = 3000;
+// const connection = require('./database');
+const port = 3306;
+const https = require('https');
 
-app.get('/', (req, res) => res.send('Hello World!'));
+// Firebase setup for NodeJS environment
+const admin = require("firebase-admin");
+const serviceAccount = require('./serviceAccount.json')
 
-app.route('/books/:userId')
-    .get(function(req, res, next){
-        connection.query(
-            "SELECT * FROM `books` WHERE userId = ? LIMIT 3", req.params.userId,
-            function(error, results, fields) {
-                if (error) throw error;
-                res.json(results);
-            }
-        );
-    });
+// unzip library
+const yauzl = require('yauzl');
+const fs = require('fs');
 
-app.get('/status', (req, res) => res.send('Working!'));
+// Firebase setup for frontend scripts
+// const firebase = require("firebase");
+// const firebaseConfig = require('./firebaseConfig.json');
+// firebase.initializeApp(firebaseConfig);
 
-app.listen(3306);
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: process.env.FIREBASE_DB_URL
+});
+
+// Prepare WriteStream to download transitfeeds zip file
+let requestURL = process.env.TRANSITFEEDS_SFMTA_REQUEST_URL;
+let downloadFile = fs.createWriteStream("./download.zip");
+
+// GET request to transitfeeds URL will redirect to the file location
+// pipe the file to WriteStream
+// TODO: 
+https.get(requestURL, (res) => {
+    const { statusCode } = res;
+    const contentType = res.headers['content-type'];
+
+    if (statusCode == 302) {
+        https.get(res.headers['location'], (redirectResponse) => {
+            redirectResponse.pipe(downloadFile);
+            downloadFile.on('finish', () => {
+                console.log('File downloaded!')
+            });
+        })
+    }
+}).on('error', (e) => {
+    console.error(`Got error: ${e.message}`);
+});
+
+
+app.listen(port);
