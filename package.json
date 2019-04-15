@@ -1,0 +1,32 @@
+{
+  "name": "gtfsapi",
+  "version": "1.0.0",
+  "description": "An api for querying GTFS data in different formats",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "body-parser": "1.18.3",
+    "chai": "4.2.0",
+    "chai-http": "4.2.1",
+    "dotenv": "6.2.0",
+    "express": "4.16.4",
+    "mocha": "5.2.0",
+    "mysql": "2.16.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vishalbakshi/gtfsapi.git"
+  },
+  "keywords": [
+    "gtfs"
+  ],
+  "author": "Vishal Bakshi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vishalbakshi/gtfsapi/issues"
+  },
+  "homepage": "https://github.com/vishalbakshi/gtfsapi#readme"
+}
