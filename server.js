@@ -33,21 +33,30 @@ let downloadFile = fs.createWriteStream("./download.zip");
 // GET request to transitfeeds URL will redirect to the file location
 // pipe the file to WriteStream
 // TODO: unzip the file using `yauzl` 
-https.get(requestURL, (res) => {
-    const { statusCode } = res;
-    const contentType = res.headers['content-type'];
 
-    if (statusCode == 302) {
-        https.get(res.headers['location'], (redirectResponse) => {
-            redirectResponse.pipe(downloadFile);
-            downloadFile.on('finish', () => {
-                console.log('File downloaded!')
-            });
-        })
-    }
-}).on('error', (e) => {
-    console.error(`Got error: ${e.message}`);
-});
+app.route('/get-gtfs-zip-file')
+    .get((appReq, appRes) => {
+        console.log('GET requested')
+        https.get(requestURL, (res) => {
+            const { statusCode } = res;
+            console.log('Outside if statement')
+            if (statusCode == 302) {
+                console.log('Inside if statement')
+                https.get(res.headers['location'], (redirectResponse) => {
+                    redirectResponse.pipe(downloadFile);
+                    downloadFile.on('finish', () => {
+                        console.log('File downloaded!')
+                        return appRes.send('success');
+                    });
+                })
+            }
+        }).on('error', (e) => {
+            console.error(`Got error: ${e.message}`);
+        });
+    });
 
 
-app.listen(port);
+
+const server = app.listen(port);
+
+module.exports = { app: app, server: server };

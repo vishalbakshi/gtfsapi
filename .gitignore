@@ -2,3 +2,4 @@
 .env
 firebaseConfig.json
 serviceAccount.json
+download.zip
