@@ -25,6 +25,7 @@ admin.initializeApp({
     databaseURL: process.env.FIREBASE_DB_URL
 });
 
+
 // Prepare WriteStream to download transitfeeds zip file
 let requestURL = process.env.TRANSITFEEDS_SFMTA_REQUEST_URL;
 let downloadFile = fs.createWriteStream("./download.zip");
