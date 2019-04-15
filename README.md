@@ -6,7 +6,7 @@ An api for querying GTFS data
   - [ ] Upload those files to Firebase Storage (or equivalent)
   - [ ] Download from Firebase Storage and insert data into Google Cloud SQL database
   - [ ] Receive query/params from client's GET request and query Cloud SQL
-  - [ ] Convert queried data to Protocol Buffer
+  - [ ] Convert query results to Protocol Buffer
   - [ ] Send Protocol Buffer as response to client
 
 ## Version 1
@@ -57,5 +57,5 @@ This version should perform the following tasks:
   - [ ] Upload those files to Firebase Storage (or equivalent)
   - [ ] Download from Firebase Storage and insert data into Google Cloud SQL database
   - [ ] Receive query/params from client's GET request and query Cloud SQL
-  - [ ] Convert queried data to Protocol Buffer
+  - [ ] Convert query results to Protocol Buffer
   - [ ] Send Protocol Buffer as response to client
