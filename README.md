@@ -1,6 +1,13 @@
 # gtfsapi
 An api for querying GTFS data
 
+## Core Functionality
+  - [ ] Retrieve GTFS files from https://transitfeeds.com/p/sfmta
+  - [ ] Upload those files to Firebase Storage (or equivalent)
+  - [ ] Download from Firebase Storage and insert data into Google Cloud SQL database
+  - [ ] Receive query/params from client's GET request and query Cloud SQL
+  - [ ] Convert queried data to Protocol Buffer
+  - [ ] Send Protocol Buffer as response to client
 
 ## Version 1
 Right now this is barebones as I want to setup a basic environment which does the following:
@@ -32,4 +39,23 @@ returns the following JSON (the query is limited to 3 records):
 
 ## Version 2
 
-TBD...
+This version should perform the following tasks:
+  - [ ] Retrieve GTFS files from https://transitfeeds.com/p/sfmta
+  - [ ] Upload those files to Firebase Storage (or equivalent)
+  - [ ] Download from Firebase Storage and insert data into Google Cloud SQL database
+  
+## Version 3
+
+This version should perform the following tasks:
+  - [ ] Retrieve GTFS files from https://transitfeeds.com/p/sfmta
+  - [ ] Upload those files to Firebase Storage (or equivalent)
+  - [ ] Download from Firebase Storage and insert data into Google Cloud SQL database
+  - [ ] Receive query/params from client's GET request and query Cloud SQL
+  
+## Version 4
+  - [ ] Retrieve GTFS files from https://transitfeeds.com/p/sfmta
+  - [ ] Upload those files to Firebase Storage (or equivalent)
+  - [ ] Download from Firebase Storage and insert data into Google Cloud SQL database
+  - [ ] Receive query/params from client's GET request and query Cloud SQL
+  - [ ] Convert queried data to Protocol Buffer
+  - [ ] Send Protocol Buffer as response to client
