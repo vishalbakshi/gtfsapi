@@ -10,7 +10,9 @@ const https = require('https');
 // Firebase setup for NodeJS environment
 const admin = require("firebase-admin");
 const serviceAccount = require('./serviceAccount.json')
-
+const { Storage } = require('@google-cloud/storage')
+const storage = new Storage();
+const bucketName = 'gtfs-bucket'
 // unzip library
 const yauzl = require('yauzl');
 const fs = require('fs');
@@ -22,31 +24,44 @@ const fs = require('fs');
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: process.env.FIREBASE_DB_URL
+    databaseURL: process.env.FIREBASE_DB_URL,
+    storageBucket: "gtfs-api-a9548.appspot.com"
 });
 
+// const bucket = admin.storage().bucket();
 
 // Prepare WriteStream to download transitfeeds zip file
 let requestURL = process.env.TRANSITFEEDS_SFMTA_REQUEST_URL;
 let downloadFile = fs.createWriteStream("./download.zip");
 
 // GET request to transitfeeds URL will redirect to the file location
-// pipe the file to WriteStream
+// and pipe the file to WriteStream
+
+// TODO: upload the file to firebase storage
 // TODO: unzip the file using `yauzl` 
+// TODO: Insert the file contents to Cloud SQL
+// TODO: Query Cloud SQL and send query results as response
 
 app.route('/get-gtfs-zip-file')
+    // I've differentiated the request and response objects between 
+    // the app's GET route, the first GET request and the second GET request
     .get((appReq, appRes) => {
-        console.log('GET requested')
+
         https.get(requestURL, (res) => {
             const { statusCode } = res;
-            console.log('Outside if statement')
+            // Transitfeeds download URL will redirect to the zip file's location
+            // This server should do the same
             if (statusCode == 302) {
-                console.log('Inside if statement')
                 https.get(res.headers['location'], (redirectResponse) => {
                     redirectResponse.pipe(downloadFile);
                     downloadFile.on('finish', () => {
-                        console.log('File downloaded!')
-                        return appRes.send('success');
+                        let uploadFilename = './download.zip';
+                        storage.bucket(bucketName).upload(uploadFilename, {gzip: true}).then(() => {
+                            return appRes.send('success');
+                        }).catch((err) => {
+                            console.error(err);
+                        })
+                        
                     });
                 })
             }

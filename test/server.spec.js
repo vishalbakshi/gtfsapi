@@ -3,17 +3,15 @@ const chai = require("chai");
 const assert = chai.assert;
 const Mocha = require("mocha");
 const mocha = new Mocha({ ui: "tdd" });
-//const app = require('../server.js').app;
 chai.use(chaiHttp);
 
 const port = process.env.PORT || 3306;
 
-// kill the process
-// stop server after get request
+// TODO: Start/stop server automatically
+// Currently I `npm start` and then run `npm test` from the terminal
 suite('api tests', () => {
 
     test("GET get-gtfs-zip-file returns a success message", (done) => {
-
         chai.request("http://localhost:" + port)
             .get('/get-gtfs-zip-file')
             .end((err, res) => {
