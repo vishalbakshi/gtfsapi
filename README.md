@@ -4,7 +4,8 @@ An api for querying GTFS data
 ## Core Functionality
   - [ ] Retrieve GTFS files from https://transitfeeds.com/p/sfmta
   - [ ] Upload those files to Firebase Storage (or equivalent)
-  - [ ] Download from Firebase Storage and insert data into Google Cloud SQL database
+  - [ ] Download from Firebase Storage and prepare it for Cloud SQL
+  - [ ] Insert data into Google Cloud SQL database
   - [ ] Receive query/params from client's GET request and query Cloud SQL
   - [ ] Convert query results to Protocol Buffer
   - [ ] Send Protocol Buffer as response to client
@@ -40,22 +41,25 @@ returns the following JSON (the query is limited to 3 records):
 ## Version 2
 
 This version should perform the following tasks:
-  - [ ] Retrieve GTFS files from https://transitfeeds.com/p/sfmta
-  - [ ] Upload those files to Firebase Storage (or equivalent)
-  - [ ] Download from Firebase Storage and insert data into Google Cloud SQL database
+  - [X] Retrieve GTFS files from https://transitfeeds.com/p/sfmta
+  - [X] Upload those files to Firebase Storage (or equivalent)
+  - [ ] Download from Firebase Storage and prepare it for Cloud SQL
+  - [ ] Insert data into Google Cloud SQL database
   
 ## Version 3
 
 This version should perform the following tasks:
   - [ ] Retrieve GTFS files from https://transitfeeds.com/p/sfmta
   - [ ] Upload those files to Firebase Storage (or equivalent)
-  - [ ] Download from Firebase Storage and insert data into Google Cloud SQL database
+  - [ ] Download from Firebase Storage and prepare it for Cloud SQL
+  - [ ] Insert data into Google Cloud SQL database
   - [ ] Receive query/params from client's GET request and query Cloud SQL
   
 ## Version 4
   - [ ] Retrieve GTFS files from https://transitfeeds.com/p/sfmta
   - [ ] Upload those files to Firebase Storage (or equivalent)
-  - [ ] Download from Firebase Storage and insert data into Google Cloud SQL database
+  - [ ] Download from Firebase Storage and prepare it for Cloud SQL
+  - [ ] Insert data into Google Cloud SQL database
   - [ ] Receive query/params from client's GET request and query Cloud SQL
   - [ ] Convert query results to Protocol Buffer
   - [ ] Send Protocol Buffer as response to client
