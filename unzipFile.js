@@ -4,7 +4,7 @@ var fs = require("fs");
 var util = require("util");
 var Transform = require("stream").Transform;
 
-async function unzipFile(opts, pathToFile, responseCallback) {
+function unzipFile(opts, pathToFile, responseCallback) {
 
     var zipFilePath;
     var offsetArg;
