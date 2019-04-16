@@ -7,32 +7,37 @@ const bodyParser = require('body-parser');
 const port = 3306;
 const https = require('https');
 
-// Firebase setup for NodeJS environment
-const admin = require("firebase-admin");
-const serviceAccount = require('./serviceAccount.json')
-const { Storage } = require('@google-cloud/storage')
-const storage = new Storage();
-const bucketName = 'gtfs-bucket'
 // unzip library
 const yauzl = require('yauzl');
 const fs = require('fs');
 
+// uploadFile function
+const uploadFile = require('./uploadFile');
+
+// Consider removing
+// Firebase setup for NodeJS environment
+// const admin = require("firebase-admin");
+// const serviceAccount = require('./serviceAccount.json')
+// const { Storage } = require('@google-cloud/storage')
+// const storage = new Storage();
+
+
+
+// Consider removing
 // Firebase setup for frontend scripts
 // const firebase = require("firebase");
 // const firebaseConfig = require('./firebaseConfig.json');
 // firebase.initializeApp(firebaseConfig);
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: process.env.FIREBASE_DB_URL,
-    storageBucket: "gtfs-api-a9548.appspot.com"
-});
-
+// Consider removing
+// admin.initializeApp({
+//     credential: admin.credential.cert(serviceAccount),
+//     databaseURL: process.env.FIREBASE_DB_URL,
+//     storageBucket: "gtfs-api-a9548.appspot.com"
+// });
 // const bucket = admin.storage().bucket();
 
-// Prepare WriteStream to download transitfeeds zip file
-let requestURL = process.env.TRANSITFEEDS_SFMTA_REQUEST_URL;
-let downloadFile = fs.createWriteStream("./download.zip");
+
 
 // GET request to transitfeeds URL will redirect to the file location
 // and pipe the file to WriteStream
@@ -46,7 +51,11 @@ app.route('/get-gtfs-zip-file')
     // I've differentiated the request and response objects between 
     // the app's GET route, the first GET request and the second GET request
     .get((appReq, appRes) => {
+        // Prepare WriteStream to download transitfeeds zip file
+        let requestURL = process.env.TRANSITFEEDS_SFMTA_REQUEST_URL;
+        let downloadFile = fs.createWriteStream("./download.zip");
 
+        // Request the zip file from transitfeeds
         https.get(requestURL, (res) => {
             const { statusCode } = res;
             // Transitfeeds download URL will redirect to the zip file's location
@@ -55,13 +64,12 @@ app.route('/get-gtfs-zip-file')
                 https.get(res.headers['location'], (redirectResponse) => {
                     redirectResponse.pipe(downloadFile);
                     downloadFile.on('finish', () => {
+                        // When WriteStream is done
+                        // upload this file to Google Cloud Storage
                         let uploadFilename = './download.zip';
-                        storage.bucket(bucketName).upload(uploadFilename, {gzip: true}).then(() => {
-                            return appRes.send('success');
-                        }).catch((err) => {
-                            console.error(err);
-                        })
-                        
+                        let bucketName = 'gtfs-bucket';
+                        uploadFile(bucketName, uploadFilename);
+                        appRes.send('success')                 
                     });
                 })
             }
@@ -72,6 +80,6 @@ app.route('/get-gtfs-zip-file')
 
 
 
-const server = app.listen(port);
+const server = app.listen(port, () => console.log('Listening on port'));
 
 module.exports = { app: app, server: server };
