@@ -16,7 +16,7 @@ let createAgencyTable = `create table if not exists agency(
 )`;
 
 let createStopsTable = `create table if not exists stops(
-    stop_id varchar(4),
+    stop_id varchar(4) primary key,
     stop_code vachar(5),
     stop_name varchar(100),
     stop_desc varchar(100),
@@ -32,7 +32,7 @@ let createStopsTable = `create table if not exists stops(
 )`;
 
 let createRoutesTable = `create table if not exists routes(
-    route_id varchar(5),
+    route_id varchar(5) primary key,
     agency_id varchar(5),
     route_short_name varchar(5),
     route_long_name varchar(100),
@@ -43,21 +43,29 @@ let createRoutesTable = `create table if not exists routes(
     route_sort_order int
 )`;
 
+// SFMTA trips.txt does not contain the following fields:
+// trip_short_name
+// wheelchair_accessible
+// bikes_allowed
+
+// SFMTA trips.txt contains the following fields not listed in:
+// https://developers.google.com/transit/gtfs/reference/#tripstxt
+// original_trip_id
+
 let createTripsTable = `create table if not exists trips(
-    route_id foreign key,
-    service_id foreign key,
-    trip_id,
-    trip_headsign,
-    trip_short_name,
-    direction_id,
-    block_id,
-    shape_id,
-    wheelchair_accessible,
-    bikes_allowed
+    trip_id varchar(22) primary key,
+    foreign key (route_id) references routes(route_id),
+    foreign key (service_id) references calendar(service_id),
+    trip_headsign varchar(50),
+    direction_id int(1),
+    block_id varchar(6),
+    foreign key (shape_id) references shapes(shape_id),
+    original_trip_id varchar(7)
+    
 )`;
 
 let createStopTimesTable = `create table if not exists stoptimes(
-    trip_id foreign key,
+    foreign key (trip_id) references trips(trip_id) ,
     arrival_time,
     departure_time,
     stop_id foreign key,
@@ -70,36 +78,38 @@ let createStopTimesTable = `create table if not exists stoptimes(
 )`
 
 let createCalendarTable = `create table if not exists calendar(
-    service_id primary key,
-    monday,
-    tuesday,
-    wednesday,
-    thursday,
-    friday,
-    saturday,
-    sunday,
-    start_date,
-    end_date
+    service_id primary key varchar(16),
+    monday int(1),
+    tuesday int(1),
+    wednesday int(1),
+    thursday int(1),
+    friday int(1),
+    saturday int(1),
+    sunday int(1),
+    start_date date,
+    end_date date
 )`;
 
 let createCalendarDatesTable = `create table if not exists calendardates(
-    service_id primary key,
+    service_id primary key varchar(16),
     calendar_date date,
-    exception_type
+    exception_type int(1)
 )`;
 
+// SFMTA fare_attributes.txt does not contain the following fields:
+// agency_id
+
 let createFareAttributesTable = `create table if not exists fareattributes(
-    fare_id primary key,
-    price,
-    currency_type,
-    payment_method,
-    transfers,
-    agency_id: foreign key,
-    transfer_duration
+    fare_id primary key int(1),
+    price float(4,2),
+    currency_type varchar(3),
+    payment_method int(1),
+    transfers int(1),
+    transfer_duration int(5)
 )`;
 
 let createFareRulesTable = `create table if not exists farerules(
-    fare_id foreign key,
+    foreign key (fare_id) references fareattributes(fare_id),
     route_id,
     origin_id,
     destination_id,
@@ -146,7 +156,6 @@ function sendQuery(query) {
             console.error("error connecting: " + err.stack);
             return
         }
-    
         console.log(rows)
     })
 }
