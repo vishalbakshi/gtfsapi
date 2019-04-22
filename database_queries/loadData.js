@@ -23,7 +23,22 @@ Can alternatively connect to database following this example:
 const connection = require('../connectDatabase');
 
 // loadTABLENAME variable is assigned [query string, filepath string]
-let loadAgency = ["load data local infile ? into table agency (agency_url, agency_name, agency_timezone, agency_id, agency_lang)", "../download/agency.txt"];
+/*
+let loadAgency = [
+    `load data local infile ? into table agency
+    fields terminated by ',' lines terminated by '\n' 
+    ignore 1 lines 
+    (
+        agency_url, 
+        agency_name, 
+        agency_timezone, 
+        agency_id, 
+        agency_lang
+    )`, 
+    "../download/agency.txt"
+];
+*/
+
 let loadCalendarDates;
 let loadCalendar;
 let loadFareAttributes;
@@ -43,7 +58,18 @@ function loadFileDataQuery(query, filepath) {
     })
 };
 
-loadFileDataQuery(loadAgency[0], loadAgency[1]);
+// SQL queries to load local file data to corresponding table
+// loadFileDataQuery(loadAgency[0], loadAgency[1]);
+loadFileDateQuery(load)
+
+/*
+connection.query('DELETE FROM agency', function(err) {
+    if (err) {
+        console.error("error connecting: " + err.stack);
+        return
+    }
+})
+*/
 
 connection.end();
 
