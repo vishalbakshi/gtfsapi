@@ -17,14 +17,13 @@ let createAgencyTable = `create table if not exists agency(
 
 let createStopsTable = `create table if not exists stops(
     stop_id varchar(4) primary key,
-    stop_code vachar(5),
+    stop_code varchar(5),
     stop_name varchar(100),
     stop_desc varchar(100),
     stop_lat float(8,6),
     stop_lon float(9,6),
     zone_id varchar(100),
     stop_url varchar(100),
-    location_type int,
     parent_station varchar(4),
     stop_timezone varchar(100),
     location_type int,
@@ -54,16 +53,24 @@ let createRoutesTable = `create table if not exists routes(
 
 let createTripsTable = `create table if not exists trips(
     trip_id varchar(22) primary key,
-    foreign key (route_id) references routes(route_id),
-    foreign key (service_id) references calendar(service_id),
+    route_id varchar(5),
+    foreign key (route_id)
+    references routes(route_id),
+    service_id varchar(16),
+    foreign key (service_id)
+    references calendar(service_id),
     trip_headsign varchar(50),
     direction_id int(1),
     block_id varchar(6),
-    foreign key (shape_id) references shapes(shape_id),
+    shape_id varchar(21),
+    foreign key (shape_id)
+    references shapes(shape_id),
     original_trip_id varchar(7)
-    
 )`;
 
+// SFMTA GTFS folder does not contain the following tables: 
+// stoptimes.txt file
+/*
 let createStopTimesTable = `create table if not exists stoptimes(
     foreign key (trip_id) references trips(trip_id) ,
     arrival_time,
@@ -76,9 +83,11 @@ let createStopTimesTable = `create table if not exists stoptimes(
     shape_dist_traveled,
     timepoint
 )`
+*/
+
 
 let createCalendarTable = `create table if not exists calendar(
-    service_id primary key varchar(16),
+    service_id varchar(16) primary key ,
     monday int(1),
     tuesday int(1),
     wednesday int(1),
@@ -91,16 +100,17 @@ let createCalendarTable = `create table if not exists calendar(
 )`;
 
 let createCalendarDatesTable = `create table if not exists calendardates(
-    service_id primary key varchar(16),
+    service_id varchar(16) primary key,
     calendar_date date,
     exception_type int(1)
 )`;
+
 
 // SFMTA fare_attributes.txt does not contain the following fields:
 // agency_id
 
 let createFareAttributesTable = `create table if not exists fareattributes(
-    fare_id primary key int(1),
+    fare_id int(1) primary key,
     price float(4,2),
     currency_type varchar(3),
     payment_method int(1),
@@ -108,22 +118,34 @@ let createFareAttributesTable = `create table if not exists fareattributes(
     transfer_duration int(5)
 )`;
 
+// Not sure what should be selected as forein keys to the stops table
 let createFareRulesTable = `create table if not exists farerules(
-    foreign key (fare_id) references fareattributes(fare_id),
-    route_id,
-    origin_id,
-    destination_id,
-    contains_id
+    id int primary key auto_increment,
+    fare_id int(1),
+    route_id varchar(5),
+    origin_id varchar(100),
+    destination_id varchar(100),
+    contains_id varchar(100),
+    foreign key (fare_id)
+    references fareattributes(fare_id),
+    foreign key (route_id)
+    references routes(route_id)
 )`;
 
 let createShapesTable = `create table if not exists shapes(
-    shape_id primary key,
-    shape_pt_lat,
-    shape_pt_lon,
-    shape_pt_sequence,
-    shape_dist_traveled
+    shape_id varchar(21) primary key,
+    shape_pt_lat float(8,6),
+    shape_pt_lon float(9,6),
+    shape_pt_sequence int(2),
+    shape_dist_traveled float(6,1)
 )`;
 
+// SFMTA GTFS folder does not contain the following tables: 
+// frequencies.txt file
+// transfers.txt file
+// feedinfo.txt file
+
+/*
 let createFrequenciesTable = `create table if not exists frequencies(
     trip_id foreign key,
     start_time time,
@@ -149,6 +171,11 @@ let createFeedInfoTable = `create table if not exists feedinfo(
     feed_contact_email,
     feed_contact_url
 )`;
+*/
+
+let allCreateTableQueries = [
+    createFareRulesTable
+];
 
 function sendQuery(query) {
     connection.query(query, function(err, rows, fields){
@@ -156,10 +183,13 @@ function sendQuery(query) {
             console.error("error connecting: " + err.stack);
             return
         }
-        console.log(rows)
     })
 }
 
+allCreateTableQueries.forEach(function(query){
+    console.log(query)
+    sendQuery(query);
+})
 connection.end()
 // const server = app.listen(port);
 
