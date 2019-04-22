@@ -1,5 +1,5 @@
 # database_queries
-This file references/uses the `database.js` script in this repo and requires the `dotenv` package.
+The files in this folder requires the `database.js` script in this repo and requires the `dotenv` package.
 
 Note: either add the following variables to your `.env` file...
 ```
