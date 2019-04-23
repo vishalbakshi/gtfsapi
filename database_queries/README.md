@@ -2,7 +2,11 @@
 
 ## Installation
 
-If you're not familiar with node, you can use the SQL files with whatever local server you have running.
+If you're not familiar with node, you can use the SQL files with whatever local server you have running:
+
+<a href="https://github.com/vishalbakshi/gtfsapi/blob/version2/database_queries/createTables.sql">`createTables.sql`</a>: Contains queries to create new tables (if they don't already exist)
+
+<a href="https://github.com/vishalbakshi/gtfsapi/blob/version2/database_queries/loadData.sql">`loadData.sql`</a>: Contains queries to load data from the gtfs folder into your tables.
 
 Otherwise, since the files in this folder require the `database.js` script, `dotenv` package and `mysql` package so please download the full repo, and `npm install`. I've used the latest version of node (11.3.0).
 
