@@ -1,5 +1,12 @@
 # database_queries
-The files in this folder requires the `database.js` script in this repo and requires the `dotenv` package.
+
+## Installation
+
+If you're not familiar with node, you can use the SQL files with whatever local server you have running.
+
+Otherwise, since the files in this folder require the `database.js` script, `dotenv` package and `mysql` package so please download the full repo, and `npm install`. I've used the latest version of node (11.3.0).
+
+Once you have done that, make the following adjustments to the files:
 
 Note: either add the following variables to your `.env` file...
 ```
@@ -8,7 +15,7 @@ Note: either add the following variables to your `.env` file...
     DB_USER=
     DB_PASSWORD=
 ```
-...and make sure to direct `dotenv` to your environment variables filepath...
+...and make sure to direct `dotenv` in each file (`createTables.js` and `loadData.js`) to your environment variables filepath...
 
 `require('dotenv').config({path: "path/to/env"})`
 
