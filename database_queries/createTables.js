@@ -193,7 +193,7 @@ function sendQuery(query) {
 
 
 // Send your query to the database here
-sendQuery(createStopTimesTable)
+// sendQuery(createStopTimesTable)
 
 
 connection.end();
