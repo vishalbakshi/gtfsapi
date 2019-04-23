@@ -20,7 +20,7 @@ Can alternatively connect to database following this example:
     connection.connect();
 */
 
-const connection = require('../connectDatabase');
+const connection = require('./connectDatabase');
 
 let createAgencyTable = `create table if not exists agency(
     agency_id char(5) primary key,
@@ -54,6 +54,7 @@ let createRoutesTable = `create table if not exists routes(
     route_type int,
     route_url varchar(100),
     route_color varchar(100),
+    route_text_color varchar(100),
     route_sort_order int
 )`;
 
@@ -82,22 +83,20 @@ let createTripsTable = `create table if not exists trips(
     original_trip_id varchar(7)
 )`;
 
-// SFMTA GTFS folder does not contain the following table: 
-// stoptimes.txt file
-/*
+
 let createStopTimesTable = `create table if not exists stoptimes(
-    foreign key (trip_id) references trips(trip_id) ,
-    arrival_time,
-    departure_time,
-    stop_id foreign key,
-    stop_sequence,
-    stop_headsign,
-    pickup_type,
-    drop_off_type,
-    shape_dist_traveled,
-    timepoint
+    trip_id varchar(22) primary key,
+    arrival_time time,
+    departure_time time,
+    stop_id varchar(4),
+    stop_sequence int,
+    stop_headsign varchar(100),
+    pickup_type int(1),
+    drop_off_type int(1),
+    shape_dist_traveled float,
+    timepoint int(1)
 )`
-*/
+
 
 
 let createCalendarTable = `create table if not exists calendar(
@@ -132,16 +131,12 @@ let createFareAttributesTable = `create table if not exists fareattributes(
 )`;
 
 let createFareRulesTable = `create table if not exists farerules(
-    id int primary key auto_increment,
+    fare_rules_id int not null primary key auto_increment,
     fare_id int(1),
     route_id varchar(5),
     origin_id varchar(100),
     destination_id varchar(100),
-    contains_id varchar(100),
-    foreign key (fare_id)
-    references fareattributes(fare_id),
-    foreign key (route_id)
-    references routes(route_id)
+    contains_id varchar(100)
 )`;
 
 let createShapesTable = `create table if not exists shapes(
@@ -195,6 +190,10 @@ function sendQuery(query) {
         }
     })
 }
+
+
+// Send your query to the database here
+sendQuery(createStopTimesTable)
 
 
 connection.end();

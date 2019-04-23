@@ -29,7 +29,7 @@ You can run the following once your database is connected:
 
 `node createTables.js`
 
-Creates new tables (if they don't exist) using a schema that is right now based on the April 9th GTFS data received from the SFMTA. There are some field differences between the SFMTA GTFS feed and the <a href="https://developers.google.com/transit/gtfs/reference/"> GTFS reference which are written in the comments of `createTables.js`.
+Creates new tables (if they don't exist) using a schema that is right now based on the April 9th GTFS data received from the SFMTA. There are some field differences between the SFMTA GTFS feed and the <a href="https://developers.google.com/transit/gtfs/reference/"> GTFS reference </a> which are written in the comments of `createTables.js`.
 
 `node loadData.js`
 
